@@ -1,0 +1,137 @@
+Features in Expense App:
+
+Bhai 🔥 ab main tumhe Level 1 (Professional upgrade) + Level 2 (Bigger CRUD app) ko mix karke final feature list deta hoon.
+
+Final app = Auth + Personal Expense Manager + Analytics Dashboard
+
+Ye resume-level project banega 🚀
+
+💰 FINAL PROJECT: Smart Expense Manager
+🟢 CORE FEATURES (Level 1 + Level 2 Mixed)
+🔐 1️⃣ Authentication System (Professional Level)
+
+Register
+
+Login
+
+Logout
+
+JWT Token
+
+Protected Routes
+
+Password hashing (bcrypt)
+
+Token expiry
+
+Axios interceptor
+
+👉 Real-world backend experience
+
+👤 2️⃣ User-Specific Data
+
+Har user ka apna expense data
+
+Har user ka apna dashboard
+
+Multi-user secure system
+
+👉 SaaS-style app
+
+💸 3️⃣ Transaction System (Main Module)
+
+Transaction fields:
+
+Amount
+
+Type (Income / Expense)
+
+Category
+
+Description
+
+Date
+
+User ID
+
+Actions:
+
+Add transaction
+
+Edit transaction
+
+Delete transaction
+
+View transaction list
+
+📊 4️⃣ Dashboard (Professional Touch)
+
+Show:
+
+Total Income
+
+Total Expense
+
+Current Balance
+
+Monthly summary
+
+Category breakdown (Pie chart)
+
+Income vs Expense (Bar chart)
+
+Recent transactions
+
+👉 Use Recharts
+
+🔎 5️⃣ Filtering & Sorting
+
+Filter by category
+
+Filter by type (income/expense)
+
+Filter by date range
+
+Sort by newest/oldest
+
+Pagination
+
+📅 6️⃣ Monthly Analytics
+
+This month income
+
+This month expense
+
+Previous month comparison
+
+Growth percentage
+
+👉 MongoDB aggregation use karoge
+
+🧠 7️⃣ Professional Features
+
+Loading states
+
+Error boundaries
+
+Toast notifications
+
+Rate limiting (auth routes)
+
+Form validation
+
+Clean API structure
+
+🔵 EXTRA (To Make It Resume-Level)
+
+Dark/Light theme toggle
+
+Delete confirmation modal
+
+Optimistic UI update
+
+Search with debounce
+
+Export transactions (CSV)
+
+Role-based user (admin view)

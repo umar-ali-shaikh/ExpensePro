@@ -1,0 +1,226 @@
+expense-tracker-pro
+│
+├── backend
+│   ├── config
+│   │   └── db.js
+│   │
+│   ├── models
+│   │   ├── User.js
+│   │   └── Transaction.js
+│   │
+│   ├── routes
+│   │   ├── authRoutes.js
+│   │   └── transactionRoutes.js
+│   │
+│   ├── middleware
+│   │   └── authMiddleware.js
+│   │
+│   ├── controllers
+│   │   ├── authController.js
+│   │   └── transactionController.js
+│   │
+│   ├── server.js
+│   └── .env
+│
+└── frontend
+    ├── src
+    │   ├── pages
+    │   │   ├── LoginPage.jsx
+    │   │   ├── RegisterPage.jsx
+    │   │   ├── Dashboard.jsx
+    │   │   └── AddTransaction.jsx
+    │   │
+    │   ├── components
+    │   │   ├── Navbar.jsx
+    │   │   ├── ProtectedRoute.jsx
+    │   │   ├── SummaryCards.jsx
+    │   │   └── TransactionCard.jsx
+    │   │
+    │   ├── lib
+    │   │   └── axios.js
+    │   │
+    │   └── App.jsx
+    │
+    └── package.json
+
+
+
+🔥 PHASE 1 – Backend Setup
+Step 1:
+
+Initialize backend
+Install:
+
+express
+
+mongoose
+
+dotenv
+
+cors
+
+bcryptjs
+
+jsonwebtoken
+
+Step 2:
+
+Create MongoDB connection (config/db.js)
+
+Step 3:
+
+Create User Model
+
+Fields:
+
+name
+email
+password
+
+Step 4:
+
+Create Auth Routes
+
+POST /register
+
+POST /login
+
+Step 5:
+
+Password hash using bcrypt
+
+Step 6:
+
+Generate JWT token
+
+🔐 PHASE 2 – Auth Middleware
+
+Create:
+
+middleware/authMiddleware.js
+
+
+Get token from header
+
+Verify token
+
+Attach user to request
+
+💸 PHASE 3 – Transaction System
+Transaction Model:
+user: ObjectId
+amount: Number
+type: income | expense
+category: String
+description: String
+date: Date
+
+Routes:
+
+POST /transactions
+
+GET /transactions
+
+DELETE /transactions/:id
+
+PUT /transactions/:id
+
+All protected by auth middleware.
+
+📊 PHASE 4 – Dashboard Logic (MongoDB Aggregation)
+
+Calculate:
+
+Total income
+
+Total expense
+
+Balance
+
+Use:
+
+Transaction.aggregate()
+
+🎨 PHASE 5 – Frontend Setup
+Step 1:
+
+Create Vite + React app
+
+Step 2:
+
+Install:
+
+axios
+
+react-router-dom
+
+react-hot-toast
+
+tailwind
+
+daisyUI
+
+recharts
+
+🔐 PHASE 6 – Frontend Auth
+
+Register page
+
+Login page
+
+Store JWT in localStorage
+
+Axios interceptor for token
+
+ProtectedRoute component
+
+📊 PHASE 7 – Dashboard UI
+
+Show:
+
+Balance card
+
+Income card
+
+Expense card
+
+Pie chart (Recharts)
+
+Recent transactions list
+
+🔎 PHASE 8 – Filters + Pagination
+
+Add:
+
+Filter by category
+
+Filter by type
+
+Date range filter
+
+Pagination backend logic
+
+🚀 PHASE 9 – Production
+
+Rate limiting
+
+Environment variables
+
+Deployment (Render)
+
+MongoDB Atlas
+
+Static frontend serve
+
+🎯 FINAL RESULT
+
+Tumhara app hoga:
+
+✔ Full Authentication
+✔ Secure API
+✔ User-specific data
+✔ Aggregation logic
+✔ Analytics dashboard
+✔ Production ready
+
+Ye resume-level project hoga.

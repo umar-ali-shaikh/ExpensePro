@@ -1,0 +1,68 @@
+Require Installation For Projects:
+
+
+*** Backend :
+
+🔹 1️⃣ Install NPM
+
+When you install Node.js, NPM automatically installs with it.
+
+Check version:
+
+node -v
+npm -v
+
+🔹 2️⃣ Initialize a Project
+
+Create a new project:
+
+npm init
+
+
+Or quick setup:
+
+npm init -y
+
+
+This creates a package.json file.
+
+🔹 3️⃣ Install Packages
+Install locally (recommended)
+npm install express
+
+
+Shortcut:
+
+npm i express
+
+Install globally
+npm install -g nodemon
+
+🔹 4️⃣ Install Specific Version
+npm install react@18.2.0
+
+🔹 5️⃣ Install Dev Dependency
+npm install nodemon --save-dev
+
+
+Used for development only.
+
+🔹 6️⃣ Remove Package
+npm uninstall express
+
+🔹 7️⃣ Run Scripts
+
+Inside package.json:
+
+"scripts": {
+  "start": "node index.js",
+  "dev": "nodemon index.js"
+}
+
+
+Run:
+
+npm run dev
+
+🔹 8️⃣ Update Package
+npm update

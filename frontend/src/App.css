@@ -1,0 +1,59 @@
+/* Login / Register */
+
+
+
+
+/* login */
+.brand-Section {
+    position: relative;
+    z-index: 1;
+
+    background: rgba(19, 182, 236, 0.15);
+    /* transparent primary */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+
+    box-shadow:
+        0 4px 30px rgba(0, 0, 0, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.react-icons {
+    font-size: 38px !important;
+}
+
+
+/* register */
+
+.register-body {
+  /* min-height: 100vh; */
+
+  background:
+    /* 🔵 Blue – Top Right (2nd corner) */
+    radial-gradient(
+      circle at top right,
+      rgba(19, 182, 236, 0.35) 0%,
+      transparent 45%
+    ),
+
+    /* 🟢 Green – Bottom Left (4th corner) */
+    radial-gradient(
+      circle at bottom left,
+      rgba(34, 197, 94, 0.35) 0%,
+      transparent 45%
+    ),
+
+    /* Base Dark Background */
+    linear-gradient(
+      135deg,
+      #0b1f26 0%,
+      #0e2a33 50%,
+      #12343f 100%
+    );
+
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
