@@ -55,7 +55,9 @@ if (process.env.NODE_ENV === "production") {
     app.use((req, res) => {
         res.sendFile(path.join(frontendPath, "index.html"));
     });
-}
+} 
+
+app.set("trust proxy", 1);
 
 const startServer = async () => {
     await connectDB(); // wait until DB connects
