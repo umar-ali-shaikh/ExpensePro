@@ -13,6 +13,7 @@
     "@react-oauth/google": "^0.13.4",
     "axios": "^1.13.5",
     "lucide-react": "^0.564.0",
+    "mern-project2": "file:..",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hot-toast": "^2.6.0",

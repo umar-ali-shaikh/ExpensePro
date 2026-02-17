@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { Link, useLocation } from "react-router-dom"
-import axios from "axios"
+import api from "../libs/axios"
 import Footer from "./Footer"
 
 export default function Navbar({ title = "Dashboard" }) {
@@ -30,14 +30,8 @@ export default function Navbar({ title = "Dashboard" }) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const token = localStorage.getItem("token")
 
-        const res = await axios.get(
-          "http://localhost:5000/api/users/me",
-          {
-            headers: { Authorization: `Bearer ${token}` }
-          }
-        )
+        const res = await api.get("/users/me");;
 
         setUser(res.data)
 
@@ -150,7 +144,7 @@ export default function Navbar({ title = "Dashboard" }) {
 
               {user?.profileImage ? (
                 <img
-                  src={`http://localhost:5000${user.profileImage}`}
+                  src={`${import.meta.env.VITE_API_URL_image}${user.profileImage}`}
                   alt="profile"
                   className="w-full h-full object-cover"
                 />

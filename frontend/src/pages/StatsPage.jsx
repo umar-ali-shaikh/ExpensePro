@@ -2,7 +2,7 @@ import Navbar from "../components/Navbar"
 import { NoRecentTransactions, Transaction } from "../components/NoUniversal"
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom"
-import axios from "axios"
+import api from "../libs/axios";
 
 export default function StatsPage() {
 
@@ -13,31 +13,23 @@ export default function StatsPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = localStorage.getItem("token")
-
                 const [transactionsRes, userRes, targetsRes] = await Promise.all([
-                    axios.get("http://localhost:5000/api/transactions", {
-                        headers: { Authorization: `Bearer ${token}` }
-                    }),
-                    axios.get("http://localhost:5000/api/users/me", {
-                        headers: { Authorization: `Bearer ${token}` }
-                    }),
-                    axios.get("http://localhost:5000/api/targets", {
-                        headers: { Authorization: `Bearer ${token}` }
-                    })
-                ])
+                    api.get("/transactions"),
+                    api.get("/users/me"),
+                    api.get("/targets"),
+                ]);
 
-                setTransactions(transactionsRes.data || [])
-                setUserName(userRes.data?.name || "User")
-                setTargets(targetsRes.data || [])
+                setTransactions(transactionsRes.data || []);
+                setUserName(userRes.data?.name || "User");
+                setTargets(targetsRes.data || []);
 
             } catch (err) {
-                console.log(err)
+                console.log(err.response?.data || err.message);
             }
-        }
+        };
 
-        fetchData()
-    }, [])
+        fetchData();
+    }, []);
 
     /* ================= MONTHLY FILTER ================= */
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import axios from "axios";
+import api from "../libs/axios";
 
 const FinancialTargets = () => {
   const [targets, setTargets] = useState([]);
@@ -14,20 +14,11 @@ const FinancialTargets = () => {
 
   const fetchTargets = async () => {
     try {
-      const token = localStorage.getItem("token");
-
-      const res = await axios.get(
-        "http://localhost:5000/api/targets",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setTargets(res.data);
+      const { data } = await api.get("/targets");
+      setTargets(data || []);
     } catch (error) {
-      console.error(error);
+      console.error(error.response?.data || error.message);
+      setTargets([]);
     } finally {
       setLoading(false);
     }

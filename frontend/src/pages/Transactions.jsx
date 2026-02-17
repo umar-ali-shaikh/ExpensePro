@@ -51,7 +51,7 @@ export default function Transactions() {
     >
       <Navbar title="Transactions" />
 
-      <main className="px-6 py-8 max-w-3xl mx-auto">
+      <main className="px-6 py-8 max-w-3xl mx-auto mb-20">
 
         {/* FILTER TABS */}
         <div

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
+import api from "../libs/axios";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function Login() {
@@ -13,28 +13,26 @@ export default function Login() {
   const [password, setPassword] = useState("")
 
   const handleLogin = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        { email, password }
-      )
+      const { data } = await api.post("/auth/login", {
+        email,
+        password,
+      });
 
-      localStorage.setItem("token", res.data.token)
+      localStorage.setItem("token", data.token);
 
-      toast.success("Login Successful 🎉")
+      toast.success("Login Successful 🎉");
 
-      setTimeout(() => {
-        navigate("/dashboard")
-      }, 1000)
+      navigate("/dashboard");
 
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Login failed ❌"
-      )
+      );
     }
-  }
+  };
 
   return (
     <div className="dark bg-background-light dark:bg-background-dark min-h-screen flex items-center justify-center p-4 bg-mesh font-display">
@@ -171,25 +169,24 @@ export default function Login() {
               <GoogleLogin
                 onSuccess={async (credentialResponse) => {
                   try {
-                    const res = await axios.post(
-                      "http://localhost:5000/api/auth/google",
-                      { credential: credentialResponse.credential }
-                    );
+                    const { data } = await api.post("/auth/google", {
+                      credential: credentialResponse.credential,
+                    });
 
-                    localStorage.setItem("token", res.data.token);
+                    localStorage.setItem("token", data.token);
+
                     toast.success("Google Login Successful 🎉");
 
-                    setTimeout(() => {
-                      navigate("/dashboard");
-                    }, 1000);
+                    navigate("/dashboard");
 
                   } catch (err) {
-                    console.error("Login Failed:", err);
+                    console.error("Login Failed:", err.response?.data || err.message);
                     toast.error("Google Login Failed ❌");
                   }
                 }}
                 onError={() => {
                   console.log("Google Login Failed");
+                  toast.error("Google Login Failed ❌");
                 }}
               />
             </div>

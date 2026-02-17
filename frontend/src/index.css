@@ -116,6 +116,9 @@ body {
     /* background-color: var(--color-background-dark); */
 
 }
+html{
+    background-color: var(--bg-main);
+}
 
 .auth-card {
     box-shadow: 0 10px 40px -10px rgba(19, 182, 236, 0.15);

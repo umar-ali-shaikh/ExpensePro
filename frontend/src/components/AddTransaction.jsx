@@ -1,12 +1,10 @@
 import { useNavigate } from "react-router-dom"
-// import useTransactions from "../hooks/useTransactions"
 import toast from "react-hot-toast"
 import TransactionForm from "../components/TransactionForm"
+import api from "../libs/axios";
 
 export default function AddTransaction() {
   const navigate = useNavigate();
-  // const { addTransaction } = useTransactions();
-
   const handleAdd = async (data) => {
     try {
       const token = localStorage.getItem("token")
@@ -16,14 +14,10 @@ export default function AddTransaction() {
         return
       }
 
-      const res = await fetch("http://localhost:5000/api/transactions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(data)
-      })
+      const res = await api.post(
+        "/transactions",
+        data
+      );
 
       if (!res.ok) {
         const errorData = await res.json()

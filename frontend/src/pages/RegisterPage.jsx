@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
-import axios from "axios"
+import api from "../libs/axios"
 import toast from "react-hot-toast"
 
 export default function Register() {
@@ -32,23 +32,26 @@ export default function Register() {
     }
 
     try {
-      setLoading(true)
+      setLoading(true);
 
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/register",
-        { name, email, password }
-      )
+      const { data } = await api.post("/auth/register", {
+        name,
+        email,
+        password,
+      });
 
-      localStorage.setItem("token", res.data.token)
+      localStorage.setItem("token", data.token);
 
-      toast.success("Account created successfully 🎉")
+      toast.success("Account created successfully 🎉");
 
-      navigate("/dashboard")
+      navigate("/dashboard");
 
     } catch (error) {
-      toast.error(error.response?.data?.message || "Registration failed")
+      toast.error(
+        error.response?.data?.message || "Registration failed"
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 

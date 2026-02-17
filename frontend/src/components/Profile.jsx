@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
+import api from "../libs/axios";
 
 export default function Profile() {
 
@@ -19,15 +19,7 @@ export default function Profile() {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const token = localStorage.getItem("token")
-
-                const res = await axios.get(
-                    "http://localhost:5000/api/users/me",
-                    {
-                        headers: { Authorization: `Bearer ${token}` }
-                    }
-                )
-
+                const res = await api.get("/users/me");
                 setUser(res.data)
 
             } catch (err) {
@@ -51,41 +43,34 @@ export default function Profile() {
     }, [darkMode])
 
     const handleLogout = () => {
-        localStorage.removeItem("token")
-        localStorage.removeItem("user")
-        navigate("/login")
-    }
+        localStorage.clear();
+        navigate("/login");
+    };
 
-
-    /* ================= Profile image ================= */
-    // // const fileInputRef = useRef()
-
-    // // const handleImageClick = () => {
-    // //     fileInputRef.current.click()
-    // // }
 
     const handleImageUpload = async (e) => {
-        const file = e.target.files[0]
-        if (!file) return
+        const file = e.target.files[0];
+        if (!file) return;
 
-        const formData = new FormData()
-        formData.append("image", file)
+        const formData = new FormData();
+        formData.append("image", file);
 
-        const token = localStorage.getItem("token")
-
-        const res = await axios.put(
-            "http://localhost:5000/api/users/upload",
-            formData,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "multipart/form-data"
+        try {
+            const { data } = await api.put(
+                "/users/upload",
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
                 }
-            }
-        )
+            );
 
-        setUser(res.data)
-    }
+            setUser(data);
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     return (
         <div
@@ -96,13 +81,13 @@ export default function Profile() {
             }}
         >
 
-            <main className="flex-1 overflow-y-auto pb-24">
+            <main className="flex-1 overflow-y-auto pb-24 ">
 
                 {/* HEADER */}
                 <Navbar title="Profile" />
 
                 {/* PROFILE CARD */}
-                <div className="px-6 mb-8">
+                <div className="px-6 mb-8 mt-8">
                     <div
                         className="relative rounded-3xl p-8 text-center overflow-hidden"
                         style={{
@@ -135,7 +120,7 @@ export default function Profile() {
 
                                 {user?.profileImage ? (
                                     <img
-                                        src={`http://localhost:5000${user.profileImage}`}
+                                        src={`${import.meta.env.VITE_API_URL_image}${user.profileImage}`}
                                         alt="profile"
                                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                                     />

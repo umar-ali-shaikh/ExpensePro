@@ -2,7 +2,7 @@ import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
 import { NoRecentTransactions, Transaction } from "../components/NoUniversal"
 import { useEffect, useState } from "react"
-import axios from "axios"
+import api from "../libs/axios"
 import { Link } from "react-router-dom"
 
 function Bar({ value, max }) {
@@ -34,34 +34,25 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const token = localStorage.getItem("token")
+        const res = await api.get("/transactions");
 
-        const res = await axios.get(
-          "http://localhost:5000/api/transactions",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        )
+        setTransactions(Array.isArray(res.data) ? res.data : []);
 
-        setTransactions(res.data || [])
       } catch (error) {
-        console.log(error)
+        console.log(error.response?.data || error.message);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchTransactions()
-  }, [])
+    fetchTransactions();
+  }, []);
 
   /* ================= TOTAL BALANCE ================= */
 
-  const totalBalance = transactions.reduce(
-    (acc, t) => acc + Number(t.amount),
-    0
-  )
+  const totalBalance = Array.isArray(transactions)
+    ? transactions.reduce((acc, t) => acc + Number(t.amount), 0)
+    : 0;
 
   /* ================= WEEKLY SPENDING ================= */
 
@@ -97,7 +88,7 @@ export default function Dashboard() {
     >
       <Navbar />
 
-      <main className="p-6 space-y-12 max-w-6xl mx-auto">
+      <main className="p-6 space-y-12 max-w-6xl mx-auto mb-20">
 
         {/* ================= BALANCE CARD ================= */}
         <section>

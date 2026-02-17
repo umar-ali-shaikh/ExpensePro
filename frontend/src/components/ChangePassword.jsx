@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../libs/axios";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -61,8 +61,8 @@ export default function ChangePassword() {
         try {
             const token = localStorage.getItem("token");
 
-            const res = await axios.put(
-                "http://localhost:5000/api/users/change-password",
+            const res = await api.put(
+                "/users/change-password",
                 form,
                 {
                     headers: {

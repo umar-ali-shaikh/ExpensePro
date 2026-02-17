@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import api from "../libs/axios";
 import toast from "react-hot-toast";
 
 const budgetCategories = [
@@ -48,23 +48,14 @@ const SetFinancialTargetModal = () => {
 
         const fetchTarget = async () => {
             try {
-                const token = localStorage.getItem("token");
-
-                const res = await axios.get(
-                    `http://localhost:5000/api/targets/${id}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
+                const { data } = await api.get(`/targets/${id}`);
 
                 setFormData({
-                    targetType: res.data.targetType || "budget",
-                    amount: res.data.amount ? String(res.data.amount) : "",
-                    category: res.data.category || "shopping",
+                    targetType: data.targetType || "budget",
+                    amount: data.amount ? String(data.amount) : "",
+                    category: data.category || "shopping",
                     customCategory: "",
-                    period: res.data.period || "monthly"
+                    period: data.period || "monthly",
                 });
 
             } catch (error) {
@@ -90,8 +81,6 @@ const SetFinancialTargetModal = () => {
 
     const handleSubmit = async () => {
         try {
-            const token = localStorage.getItem("token");
-
             if (!formData.amount) {
                 toast.error("Amount is required");
                 return;
@@ -109,26 +98,10 @@ const SetFinancialTargetModal = () => {
             };
 
             if (isEdit) {
-                await axios.put(
-                    `http://localhost:5000/api/targets/${id}`,
-                    finalData,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
+                await api.put(`/targets/${id}`, finalData);
                 toast.success("Target Updated");
             } else {
-                await axios.post(
-                    "http://localhost:5000/api/targets",
-                    finalData,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
+                await api.post("/targets", finalData);
                 toast.success("Target Created");
             }
 

@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { TransactionContext } from "./TransactionContext"
+import api from "../libs/axios"
 
 export function TransactionProvider({ children }) {
 
@@ -8,31 +9,15 @@ export function TransactionProvider({ children }) {
 
   const fetchTransactions = async () => {
     try {
-      const token = localStorage.getItem("token")
+      const { data } = await api.get("/transactions");
 
-      const res = await fetch("http://localhost:5000/api/transactions", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        }
-      })
-
-      if (!res.ok) {
-        console.log("Unauthorized or error")
-        setTransactions([])
-        return
-      }
-
-      const data = await res.json()
-
-      setTransactions(Array.isArray(data) ? data : [])
+      setTransactions(Array.isArray(data) ? data : []);
 
     } catch (error) {
-      console.error(error)
-      setTransactions([])
+      console.error(error.response?.data || error.message);
+      setTransactions([]);
     }
-  }
+  };
 
   return (
     <TransactionContext.Provider
