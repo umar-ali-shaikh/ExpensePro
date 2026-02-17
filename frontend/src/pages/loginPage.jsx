@@ -16,12 +16,12 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const { data } = await api.post("/auth/login", {
+      const res = await api.post("/auth/login", {
         email,
         password,
       });
 
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", res.data.token);
 
       toast.success("Login Successful 🎉");
 

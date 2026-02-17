@@ -1,13 +1,13 @@
-import Navbar from "../components/Navbar"
-import Footer from "../components/Footer"
-import { NoRecentTransactions, Transaction } from "../components/NoUniversal"
-import { useEffect, useState } from "react"
-import api from "../libs/axios"
-import { Link } from "react-router-dom"
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import { NoRecentTransactions, Transaction } from "../components/NoUniversal";
+import { useEffect, useState } from "react";
+import api from "../libs/axios";
+import { Link } from "react-router-dom";
 
 function Bar({ value, max }) {
-  const height = max === 0 ? 0 : (value / max) * 160
-  const highlight = value === max && value !== 0
+  const height = max === 0 ? 0 : (value / max) * 160;
+  const highlight = value === max && value !== 0;
 
   return (
     <div className="flex flex-col items-center justify-end w-12 h-44 relative">
@@ -24,22 +24,29 @@ function Bar({ value, max }) {
         }}
       />
     </div>
-  )
+  );
 }
 
 export default function Dashboard() {
-  const [transactions, setTransactions] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
         const res = await api.get("/transactions");
 
-        setTransactions(Array.isArray(res.data) ? res.data : []);
-
+        // 100% Safe
+        if (Array.isArray(res.data)) {
+          setTransactions(res.data);
+        } else if (Array.isArray(res.data?.transactions)) {
+          setTransactions(res.data.transactions);
+        } else {
+          setTransactions([]);
+        }
       } catch (error) {
-        console.log(error.response?.data || error.message);
+        console.log("API Error:", error.response?.data || error.message);
+        setTransactions([]);
       } finally {
         setLoading(false);
       }
@@ -48,35 +55,48 @@ export default function Dashboard() {
     fetchTransactions();
   }, []);
 
-  /* ================= TOTAL BALANCE ================= */
+  // ================= SAFE DATA =================
+  const safeTransactions = Array.isArray(transactions)
+    ? transactions
+    : [];
 
-  const totalBalance = Array.isArray(transactions)
-    ? transactions.reduce((acc, t) => acc + Number(t.amount), 0)
-    : 0;
+  // ================= TOTAL BALANCE =================
+  const totalBalance = safeTransactions.reduce(
+    (acc, t) => acc + Number(t?.amount || 0),
+    0
+  );
 
-  /* ================= WEEKLY SPENDING ================= */
+  // ================= WEEKLY SPENDING =================
+  const weeklyTotals = [0, 0, 0, 0, 0, 0, 0];
 
-  const weeklyTotals = [0, 0, 0, 0, 0, 0, 0]
+  const now = new Date();
+  const startOfWeek = new Date(now);
+  startOfWeek.setDate(now.getDate() - now.getDay());
+  startOfWeek.setHours(0, 0, 0, 0);
 
-  const now = new Date()
-  const startOfWeek = new Date(now)
-  startOfWeek.setDate(now.getDate() - now.getDay())
-  startOfWeek.setHours(0, 0, 0, 0)
+  safeTransactions.forEach((t) => {
+    if (!t?.createdAt) return;
 
-  transactions.forEach((t) => {
-    const txnDate = new Date(t.createdAt)
+    const txnDate = new Date(t.createdAt);
 
     if (txnDate >= startOfWeek && Number(t.amount) < 0) {
-      const day = txnDate.getDay()
-      weeklyTotals[day] += Math.abs(Number(t.amount))
+      const day = txnDate.getDay();
+      weeklyTotals[day] += Math.abs(Number(t.amount));
     }
-  })
+  });
 
-  const max = Math.max(...weeklyTotals)
+  const max = Math.max(...weeklyTotals, 0);
 
-  /* ================= RECENT ================= */
+  // ================= RECENT =================
+  const recent = safeTransactions.slice(0, 5);
 
-  const recent = transactions.slice(0, 5)
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Loading Dashboard...</p>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -90,7 +110,7 @@ export default function Dashboard() {
 
       <main className="p-6 space-y-12 max-w-6xl mx-auto mb-20">
 
-        {/* ================= BALANCE CARD ================= */}
+        {/* TOTAL BALANCE */}
         <section>
           <div
             className="rounded-[32px] p-10 shadow-xl"
@@ -113,30 +133,14 @@ export default function Dashboard() {
                   ₹{totalBalance.toFixed(2)}
                 </h2>
               </div>
-
-              <div
-                className="px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2"
-                style={{
-                  backgroundColor:
-                    totalBalance >= 0
-                      ? "rgba(16,185,129,0.15)"
-                      : "rgba(239,68,68,0.15)",
-                  color: totalBalance >= 0 ? "#10b981" : "#ef4444"
-                }}
-              >
-                <span className="material-symbols-outlined text-sm">
-                  {totalBalance >= 0 ? "trending_up" : "trending_down"}
-                </span>
-                {totalBalance >= 0 ? "Positive" : "Negative"}
-              </div>
             </div>
           </div>
         </section>
 
-        {/* ================= MONTHLY SPENDING ================= */}
+        {/* WEEKLY SPENDING */}
         <section>
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-xl font-bold">Monthly Spending</h3>
+            <h3 className="text-xl font-bold">Weekly Spending</h3>
             <Link to="/stats"
               className="text-sm cursor-pointer"
               style={{ color: "#38bdf8" }}
@@ -157,31 +161,16 @@ export default function Dashboard() {
                 <Bar key={index} value={value} max={max} />
               ))}
             </div>
-
-            <div
-              className="flex justify-between mt-8 text-xs font-bold uppercase tracking-widest"
-              style={{ color: "var(--text-muted)" }}
-            >
-              <span>Mon</span>
-              <span>Tue</span>
-              <span>Wed</span>
-              <span>Thu</span>
-              <span>Fri</span>
-              <span>Sat</span>
-              <span>Sun</span>
-            </div>
           </div>
         </section>
 
-        {/* ================= RECENT ================= */}
+        {/* RECENT */}
         <section>
           <h3 className="text-xl font-bold mb-6">
             Recent Transactions
           </h3>
 
-          {loading ? (
-            <p>Loading...</p>
-          ) : recent.length === 0 ? (
+          {recent.length === 0 ? (
             <NoRecentTransactions />
           ) : (
             <div className="space-y-4">
@@ -204,5 +193,5 @@ export default function Dashboard() {
 
       <Footer />
     </div>
-  )
+  );
 }

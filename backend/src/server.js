@@ -46,11 +46,11 @@ app.use("/api/users", userRoutes);
 app.use("/uploads", express.static("uploads"))
 
 if (process.env.NODE_ENV === "production") {
-
     const frontendPath = path.join(__dirname, "../frontend/dist");
 
     app.use(express.static(frontendPath));
 
+    // No wildcard, no pattern
     app.use((req, res) => {
         res.sendFile(path.join(frontendPath, "index.html"));
     });

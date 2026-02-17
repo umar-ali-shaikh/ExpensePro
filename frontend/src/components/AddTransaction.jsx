@@ -7,33 +7,26 @@ export default function AddTransaction() {
   const navigate = useNavigate();
   const handleAdd = async (data) => {
     try {
-      const token = localStorage.getItem("token")
+      const token = localStorage.getItem("token");
 
       if (!token) {
-        toast.error("Please login first")
-        return
+        toast.error("Please login first");
+        return;
       }
 
-      const res = await api.post(
-        "/transactions",
-        data
-      );
+      const { data: responseData } = await api.post("/transactions", data);
 
-      if (!res.ok) {
-        const errorData = await res.json()
-        toast.error(errorData.message || "Failed to add transaction")
-        return
-      }
+      toast.success(responseData?.message || "Transaction added 🎉");
 
-      toast.success("Transaction added successfully 🎉")
-
-      navigate("/transactions", { state: { refresh: true } })
+      navigate("/transactions", { state: { refresh: true } });
 
     } catch (err) {
-      console.error(err)
-      toast.error("Something went wrong")
+      console.error(err);
+      toast.error(
+        err.response?.data?.message || "Failed to add transaction"
+      );
     }
-  }
+  };
 
   return (
     <div

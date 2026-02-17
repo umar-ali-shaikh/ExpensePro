@@ -23,13 +23,17 @@ export const createTransaction = async (req, res) => {
 /* GET USER TRANSACTIONS */
 export const getTransactions = async (req, res) => {
     try {
+        if (!req.user || !req.user._id) {
+            return res.status(401).json({ message: "Not authorized" });
+        }
+
         const transactions = await Transaction.find({
-            user: req.user._id
+            user: req.user._id,
         }).sort({ createdAt: -1 });
 
         res.json(transactions);
-
     } catch (error) {
+        console.error("Transaction Error:", error);
         res.status(500).json({ message: "Server Error" });
     }
 };
